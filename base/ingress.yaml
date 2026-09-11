@@ -13,6 +13,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: capstone-app
+                name: capstone-app-stable
                 port:
                   number: 80
