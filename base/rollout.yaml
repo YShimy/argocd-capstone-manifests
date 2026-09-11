@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: capstone-app
   labels:
@@ -43,3 +43,21 @@ spec:
             limits:
               cpu: 200m
               memory: 128Mi
+  strategy:
+    canary:
+      canaryService: capstone-app-canary
+      stableService: capstone-app-stable
+      trafficRouting:
+        nginx:
+          stableIngress: capstone-app
+      steps:
+        - setWeight: 20
+        # TODO (Section 4): replace this manual pause with an automated
+        # `analysis` step once kube-prometheus-stack is deployed. The
+        # AnalysisTemplate will use the `prometheus` provider (not `web`),
+        # querying app_health_status via PromQL - Prometheus text format
+        # from /metrics can't be parsed by the `web` provider's jsonPath.
+        - pause: {duration: 30s}
+        - setWeight: 50
+        - pause: {duration: 30s}
+        - setWeight: 100
