@@ -11,8 +11,6 @@ spec:
     targetRevision: "65.5.1"
     helm:
       values: |
-        # Single-node kind cluster: no persistent storage requested, keep
-        # resource requests modest to avoid repeating tonight's contention.
         prometheus:
           prometheusSpec:
             retention: 6h
@@ -24,9 +22,6 @@ spec:
                 cpu: 500m
                 memory: 512Mi
             storageSpec: {}
-            # Scrape ArgoCD's own metrics endpoints via ServiceMonitor
-            # (added separately below, since ArgoCD's install doesn't
-            # ship one by default).
             serviceMonitorSelectorNilUsesHelmValues: false
 
         grafana:
@@ -57,6 +52,27 @@ spec:
 
         kubeStateMetrics:
           enabled: true
+
+        # Deliberately disabled: these each create a Service in kube-system
+        # to scrape the corresponding control-plane component. Scraping
+        # cluster-internal components from a namespaced platform-team
+        # AppProject is a real privilege question - kept out of kube-system
+        # entirely per that decision, rather than granting team-beta
+        # write access there. On a real cluster these would typically be
+        # scraped via the kubelet's own /metrics/cadvisor endpoint instead,
+        # which doesn't require an in-namespace Service.
+        kubeApiServer:
+          enabled: true
+        kubeControllerManager:
+          enabled: false
+        kubeScheduler:
+          enabled: false
+        kubeEtcd:
+          enabled: false
+        kubeProxy:
+          enabled: false
+        coreDns:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
