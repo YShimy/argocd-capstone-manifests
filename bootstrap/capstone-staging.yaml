@@ -4,7 +4,7 @@ metadata:
   name: capstone-staging
   namespace: argocd
 spec:
-  project: default
+  project: team-alpha
   source:
     repoURL: https://github.com/YShimy/argocd-capstone-manifests.git
     targetRevision: main
