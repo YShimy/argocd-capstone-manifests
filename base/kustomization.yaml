@@ -6,7 +6,6 @@ resources:
   - ingress.yaml
   - servicemonitor.yaml
   - analysis-template.yaml
-  - forbidden-clusterrole.yaml
 images:
   - name: yshimy/capstone-app
     newName: yshimy/capstone-app
