@@ -52,12 +52,12 @@ spec:
           stableIngress: capstone-app
       steps:
         - setWeight: 20
-        # TODO (Section 4): replace this manual pause with an automated
-        # `analysis` step once kube-prometheus-stack is deployed. The
-        # AnalysisTemplate will use the `prometheus` provider (not `web`),
-        # querying app_health_status via PromQL - Prometheus text format
-        # from /metrics can't be parsed by the `web` provider's jsonPath.
-        - pause: {duration: 30s}
+        - analysis:
+            templates:
+              - templateName: capstone-health-check
+            args:
+              - name: canary-service
+                value: capstone-app-canary
         - setWeight: 50
         - pause: {duration: 30s}
         - setWeight: 100

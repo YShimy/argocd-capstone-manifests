@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: capstone-health-check
+spec:
+  args:
+    - name: canary-service
+      value: capstone-app-canary
+  metrics:
+    - name: health-check
+      interval: 10s
+      count: 3
+      successCondition: result[0] >= 0.8
+      failureLimit: 1
+      provider:
+        prometheus:
+          address: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
+          query: |
+            avg_over_time(app_health_status{job="{{args.canary-service}}"}[30s])
