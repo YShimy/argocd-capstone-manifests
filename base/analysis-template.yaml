@@ -16,4 +16,4 @@ spec:
         prometheus:
           address: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
           query: |
-            avg_over_time(app_health_status{job="{{args.canary-service}}"}[30s])
+            avg(avg_over_time(app_health_status{job="{{args.canary-service}}"}[30s]))
