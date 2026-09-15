@@ -4,7 +4,7 @@ metadata:
   name: argocd-metrics-monitors
   namespace: argocd
 spec:
-  project: default
+  project: team-beta
   source:
     repoURL: https://github.com/YShimy/argocd-capstone-manifests.git
     targetRevision: main
