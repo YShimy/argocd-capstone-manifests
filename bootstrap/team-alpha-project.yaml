@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: team-alpha
+  namespace: argocd
+spec:
+  description: "Application team - owns the capstone-app Rollout and its supporting resources"
+  sourceRepos:
+    - https://github.com/YShimy/argocd-capstone-manifests.git
+  destinations:
+    - namespace: capstone-staging
+      server: https://kubernetes.default.svc
+    - namespace: capstone-prod
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: argoproj.io
+      kind: Rollout
+    - group: argoproj.io
+      kind: AnalysisTemplate
+    - group: ""
+      kind: Service
+    - group: networking.k8s.io
+      kind: Ingress
+    - group: monitoring.coreos.com
+      kind: ServiceMonitor
+  roles:
+    - name: app-owner
+      description: "Full access to team-alpha's own apps"
+      policies:
+        - p, proj:team-alpha:app-owner, applications, *, team-alpha/*, allow
+      groups:
+        - team-alpha-group
