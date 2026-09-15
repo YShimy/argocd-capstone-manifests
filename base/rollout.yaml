@@ -23,7 +23,7 @@ spec:
             - name: APP_VERSION
               value: "v1"
             - name: FAILURE_RATE
-              value: "0.9"
+              value: "0"
           readinessProbe:
             httpGet:
               path: /health
