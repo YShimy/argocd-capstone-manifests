@@ -4,6 +4,7 @@ resources:
   - rollout.yaml
   - service.yaml
   - ingress.yaml
+  - servicemonitor.yaml
 images:
   - name: yshimy/capstone-app
     newName: yshimy/capstone-app
